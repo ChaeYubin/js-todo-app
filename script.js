@@ -15,19 +15,24 @@ function createNewTodo() {
 
   // 리스트 요소 안에 방금 생성한 아이템 요소 추가
   list.prepend(itemEl);
+
   inputEl.removeAttribute("disabled");
   inputEl.focus();
+
+  saveToLocalStorage();
 }
 
 function createTodoEl(item) {
+  console.log(item);
   const itemEl = document.createElement("div");
   itemEl.classList.add("item");
 
   const checkboxEl = document.createElement("input");
   checkboxEl.type = "checkbox";
+  checkboxEl.checked = item.complete;
 
   if (item.complete) {
-    checkboxEl.classList.add("complete");
+    itemEl.classList.add("complete");
   }
 
   const inputEl = document.createElement("input");
@@ -54,10 +59,12 @@ function createTodoEl(item) {
     } else {
       itemEl.classList.remove("complete");
     }
+    saveToLocalStorage();
   });
 
   inputEl.addEventListener("blur", () => {
     inputEl.setAttribute("disabled", "");
+    saveToLocalStorage();
   });
 
   editBtnEl.addEventListener("click", () => {
@@ -69,6 +76,7 @@ function createTodoEl(item) {
     todos = todos.filter((el) => el.id !== item.id);
 
     itemEl.remove();
+    saveToLocalStorage();
   });
 
   inputEl.addEventListener("input", () => {
@@ -84,3 +92,28 @@ function createTodoEl(item) {
 
   return { itemEl, inputEl, editBtnEl, removeBtnEl };
 }
+
+function saveToLocalStorage() {
+  const data = JSON.stringify(todos);
+  localStorage.setItem("todos", data);
+}
+
+function loadFromLocalStorage() {
+  const data = localStorage.getItem("todos");
+
+  if (data) {
+    todos = JSON.parse(data);
+  }
+}
+
+function displayTodos() {
+  loadFromLocalStorage();
+
+  for (let i = 0; i < todos.length; i++) {
+    const item = todos[i];
+    const { itemEl } = createTodoEl(item);
+    list.append(itemEl);
+  }
+}
+
+displayTodos();
