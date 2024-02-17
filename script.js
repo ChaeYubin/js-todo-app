@@ -11,48 +11,76 @@ function createNewTodo() {
   todos.unshift(item);
 
   // 화면에 보일 요소 생성
-  const { itemElement, inputElement, editBtnElement, removeBtnElement } =
-    createTodoElement(item);
+  const { itemEl, inputEl, editBtnEl, removeBtnEl } = createTodoEl(item);
 
   // 리스트 요소 안에 방금 생성한 아이템 요소 추가
-  list.prepend(itemElement);
-  inputElement.removeAttribute("disabled");
-  inputElement.focus();
+  list.prepend(itemEl);
+  inputEl.removeAttribute("disabled");
+  inputEl.focus();
 }
 
-function createTodoElement(item) {
-  const itemElement = document.createElement("div");
-  itemElement.classList.add("item");
+function createTodoEl(item) {
+  const itemEl = document.createElement("div");
+  itemEl.classList.add("item");
 
-  const checkboxElement = document.createElement("input");
-  checkboxElement.type = "checkbox";
+  const checkboxEl = document.createElement("input");
+  checkboxEl.type = "checkbox";
 
   if (item.complete) {
-    checkboxElement.classList.add("complete");
+    checkboxEl.classList.add("complete");
   }
 
-  const inputElement = document.createElement("input");
-  inputElement.type = "text";
-  inputElement.value = item.text;
-  inputElement.setAttribute("disabled", "");
+  const inputEl = document.createElement("input");
+  inputEl.type = "text";
+  inputEl.value = item.text;
+  inputEl.setAttribute("disabled", "");
 
-  const actionsElement = document.createElement("div");
-  actionsElement.classList.add("actions");
+  const actionsEl = document.createElement("div");
+  actionsEl.classList.add("actions");
 
-  const editBtnElement = document.createElement("button");
-  editBtnElement.classList.add("material-icons");
-  editBtnElement.innerText = "edit";
+  const editBtnEl = document.createElement("button");
+  editBtnEl.classList.add("material-icons");
+  editBtnEl.innerText = "edit";
 
-  const removeBtnElement = document.createElement("button");
-  removeBtnElement.classList.add("material-icons", "remove-btn");
-  removeBtnElement.innerText = "remove_circles";
+  const removeBtnEl = document.createElement("button");
+  removeBtnEl.classList.add("material-icons", "remove-btn");
+  removeBtnEl.innerText = "remove_circles";
 
-  actionsElement.append(editBtnElement);
-  actionsElement.append(removeBtnElement);
+  checkboxEl.addEventListener("change", () => {
+    item.complete = checkboxEl.checked;
 
-  itemElement.append(checkboxElement);
-  itemElement.append(inputElement);
-  itemElement.append(actionsElement);
+    if (item.complete) {
+      itemEl.classList.add("complete");
+    } else {
+      itemEl.classList.remove("complete");
+    }
+  });
 
-  return { itemElement, inputElement, editBtnElement, removeBtnElement };
+  inputEl.addEventListener("blur", () => {
+    inputEl.setAttribute("disabled", "");
+  });
+
+  editBtnEl.addEventListener("click", () => {
+    inputEl.removeAttribute("disabled");
+    inputEl.focus();
+  });
+
+  removeBtnEl.addEventListener("click", () => {
+    todos = todos.filter((el) => el.id !== item.id);
+
+    itemEl.remove();
+  });
+
+  inputEl.addEventListener("input", () => {
+    item.text = inputEl.value;
+  });
+
+  actionsEl.append(editBtnEl);
+  actionsEl.append(removeBtnEl);
+
+  itemEl.append(checkboxEl);
+  itemEl.append(inputEl);
+  itemEl.append(actionsEl);
+
+  return { itemEl, inputEl, editBtnEl, removeBtnEl };
 }
