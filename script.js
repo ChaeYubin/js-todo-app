@@ -8,21 +8,25 @@ const addTodoBtnEl = document.querySelector(".add-todo-btn");
 // 목표 및 투두 데이터를 담을 배열
 let goals = [];
 
+loadFromLocalStorage();
+
 // 현재 선택된 목표 아이디를 저장할 변수
-let selectedGoalId;
+let selectedGoalId = goals.length == 0 ? null : goals[0].id;
 
 // 목표가 선택되어있지 않다면 투두 추가 버튼을 비활성화한다.
 if (selectedGoalId == undefined) {
   addTodoBtnEl.setAttribute("disabled", "");
 }
 
-// 화면이 로드되면
-window.onload = () => {
-  // 현재 날짜 표시
-  showDate();
-  // 랜덤 명언 표시
-  showRandomQuote();
-};
+if (selectedGoalId !== 0) {
+  displayGoalList();
+  displayTodoList();
+}
+
+// 현재 날짜 표시
+displayDate();
+// 랜덤 명언 표시
+displayRandomQuote();
 
 // 목표를 선택하면 하위 투두리스트가 오른쪽에 보인다.
 goalListEl.addEventListener("click", (e) => {
@@ -43,12 +47,23 @@ goalListEl.addEventListener("click", (e) => {
     // 화면에 띄워진 투두리스트 목록을 지운다.
     todoListEl.innerHTML = "";
 
-    showTodoList();
+    displayTodoList();
   }
 });
 
+function displayGoalList() {
+  goals.forEach((goal) => {
+    // Ghk면에 보일 요소 생성
+    const { itemEl, inputEl, editBtnEl, deleteBtnEl } = createGoalEl(goal);
+    inputEl.setAttribute("disabled", "");
+
+    // 리스트 요소 안에 방금 생성한 아이템 요소 추가
+    goalListEl.append(itemEl);
+  });
+}
+
 // 선택한 목표의 하위 투두리스트만 화면에 그려주는 함수
-function showTodoList() {
+function displayTodoList() {
   const todoList = goals.filter((goal) => goal.id == selectedGoalId)[0].todo;
 
   if (todoList.length > 0) {
@@ -63,20 +78,20 @@ function showTodoList() {
   }
 }
 
-const showDate = () => {
+function displayDate() {
   const now = new Date();
 
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
   const date = now.getDate();
   dateEl.innerHTML = `${year}년 ${month}월 ${date}일`;
-};
+}
 
-const showRandomQuote = async () => {
+async function displayRandomQuote() {
   const response = await fetch("https://api.adviceslip.com/advice");
   const quote = await response.json();
   quoteEl.innerHTML = quote.slip.advice;
-};
+}
 
 addGoalBtnEl.addEventListener("click", createNewGoal);
 addTodoBtnEl.addEventListener("click", createNewTodo);
@@ -91,6 +106,7 @@ function createNewGoal() {
     todo: [],
   };
   goals.unshift(item);
+  saveToLocalStorage();
 
   // 화면에 보일 요소 생성
   const { itemEl, inputEl, editBtnEl, deleteBtnEl } = createGoalEl(item);
@@ -113,6 +129,10 @@ function createGoalEl(item) {
   inputEl.type = "text";
   inputEl.value = item.text;
   inputEl.classList.add("goal-text");
+
+  if (itemEl.id == selectedGoalId) {
+    itemEl.classList.add("selected-goal");
+  }
 
   const actionsEl = document.createElement("div");
   actionsEl.classList.add("actions");
@@ -140,6 +160,7 @@ function createGoalEl(item) {
 
   inputEl.addEventListener("input", () => {
     item.text = inputEl.value;
+    saveToLocalStorage();
   });
 
   editBtnEl.addEventListener("click", () => {
@@ -177,6 +198,7 @@ function createNewTodo() {
     }
     return goal;
   });
+  saveToLocalStorage();
 
   // 화면에 보일 요소 생성
   const { itemEl, inputEl, editBtnEl, deleteBtnEl } = createTodoEl(item);
@@ -222,7 +244,9 @@ function createTodoEl(item) {
     } else {
       itemEl.classList.remove("complete");
     }
+    saveToLocalStorage();
   });
+
   inputEl.addEventListener("blur", () => {
     inputEl.setAttribute("disabled", "");
   });
@@ -239,6 +263,7 @@ function createTodoEl(item) {
 
   inputEl.addEventListener("input", () => {
     item.text = inputEl.value;
+    saveToLocalStorage();
   });
 
   editBtnEl.addEventListener("click", () => {
@@ -254,6 +279,7 @@ function createTodoEl(item) {
         return { ...goal, todo: goal.todo.filter((el) => el.id !== item.id) };
       }
     });
+    saveToLocalStorage();
     itemEl.remove();
   });
 
@@ -266,4 +292,19 @@ function createTodoEl(item) {
   inputEl.focus();
 
   return { itemEl, inputEl, editBtnEl, deleteBtnEl };
+}
+
+// 로컬 스토리지에 goals 배열 저장
+function saveToLocalStorage() {
+  const data = JSON.stringify(goals);
+  localStorage.setItem("goals", data);
+}
+
+// 로컬 스토리지에서 goals 배열 가져오기
+function loadFromLocalStorage() {
+  const data = localStorage.getItem("goals");
+
+  if (data) {
+    goals = JSON.parse(data);
+  }
 }
