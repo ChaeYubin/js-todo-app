@@ -14,11 +14,11 @@ loadFromLocalStorage();
 let selectedGoalId = goals.length == 0 ? null : goals[0].id;
 
 // 목표가 선택되어있지 않다면 투두 추가 버튼을 비활성화한다.
-if (selectedGoalId == undefined) {
+if (selectedGoalId == null || goals.length == 0) {
   addTodoBtnEl.setAttribute("disabled", "");
 }
 
-if (selectedGoalId !== 0) {
+if (selectedGoalId !== null) {
   displayGoalList();
   displayTodoList();
 }
@@ -53,7 +53,7 @@ goalListEl.addEventListener("click", (e) => {
 
 function displayGoalList() {
   goals.forEach((goal) => {
-    // Ghk면에 보일 요소 생성
+    // 화면에 보일 요소 생성
     const { itemEl, inputEl, editBtnEl, deleteBtnEl } = createGoalEl(goal);
     inputEl.setAttribute("disabled", "");
 
@@ -170,6 +170,12 @@ function createGoalEl(item) {
 
   deleteBtnEl.addEventListener("click", () => {
     goals = goals.filter((el) => el.id !== item.id);
+    saveToLocalStorage();
+
+    if (goals.length == 0) {
+      addTodoBtnEl.setAttribute("disabled", "");
+    }
+
     itemEl.remove();
   });
 

@@ -164,10 +164,6 @@ main {
   padding: 20px;
 }
 
-/* 완료된 투두에 입힐 스타일 */
-.complete {
-}
-
 .add-goal-btn,
 .add-todo-btn {
   background-image: url("./assets/plus.png");
@@ -175,7 +171,6 @@ main {
   height: 15px;
   background-color: transparent;
   border: none;
-  cursor: pointer;
   background-position: center;
   background-size: cover;
   transition: all 0.3s;
@@ -184,6 +179,7 @@ main {
 .add-goal-btn:hover,
 .add-todo-btn:hover {
   opacity: 0.5;
+  cursor: pointer;
 }
 
 .division-line {
