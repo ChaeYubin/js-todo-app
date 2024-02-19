@@ -39,14 +39,41 @@ main {
   width: 50%;
   min-width: 300px;
   min-height: 400px;
+  padding: 20px;
 }
 
-.profile-img img {
-  width: 30px;
-  height: 30px;
+.goal-text {
+  width: 80%;
 }
 
-.goal-section {
+.actions {
+  display: flex;
+  gap: 5px;
+  margin-left: auto;
+}
+
+/* 수정 버튼 */
+.edit-btn {
+  width: 15px;
+  height: 15px;
+  border: none;
+  background-color: transparent;
+  background-image: url("./assets/pencil.png");
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+}
+
+/* 삭제 버튼 */
+.delete-btn {
+  width: 15px;
+  height: 15px;
+  border: none;
+  background-color: transparent;
+  background-image: url("./assets/trash.png");
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
 }
 
 .goal-section-header,
@@ -73,4 +100,5 @@ main {
   width: 50%;
   min-width: 300px;
   min-height: 400px;
+  padding: 20px;
 }
