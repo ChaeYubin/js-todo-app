@@ -18,12 +18,13 @@ body {
   gap: 20px;
 }
 
-.profile-section {
+header {
   background-color: aquamarine;
   display: flex;
+  padding: 20px;
 }
 
-.goal-todo-container {
+main {
   display: flex;
   gap: 20px;
 }
