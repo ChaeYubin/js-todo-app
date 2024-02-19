@@ -4,7 +4,13 @@
 }
 
 body {
-  background-color: rgb(247, 247, 247);
+  background: linear-gradient(
+      217deg,
+      rgb(255 0 0 / 50%),
+      rgb(255 0 0 / 0%) 70.71%
+    ),
+    linear-gradient(127deg, rgb(0 0 255 / 50%), rgb(0 0 255 / 0%) 70.71%),
+    linear-gradient(336deg, rgb(0 255 0 / 50%), rgb(0 255 0 / 0%) 70.71%);
   width: 100%;
   min-height: 100dvh;
   display: flex;
@@ -19,14 +25,26 @@ body {
 }
 
 header {
-  background-color: aquamarine;
   display: flex;
   flex-direction: column;
   padding: 20px;
+  max-width: 660px;
 }
 
-header .quote {
-  text-overflow: ellipsis;
+.date {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.glass {
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.24);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.6px);
+  -webkit-backdrop-filter: blur(4.6px);
+  border: 1px solid rgba(255, 255, 255, 0.24);
 }
 
 main {
@@ -35,19 +53,32 @@ main {
 }
 
 .goal-section {
-  background-color: antiquewhite;
   width: 50%;
   min-width: 300px;
   min-height: 400px;
   padding: 20px;
 }
 
-.selected-goal {
-  background-color: red;
+.goal-text,
+.todo-text {
+  background: none;
+  border: none;
+  outline: none;
+  width: 80%;
 }
 
-.goal-text {
-  width: 80%;
+.todo-text {
+  width: 75%;
+}
+
+.goal-text:not(:disabled),
+.todo-text:not(:disabled) {
+  padding-bottom: 3px;
+  border-bottom: 1px solid #fff;
+}
+
+.add-todo-btn:disabled {
+  opacity: 0.3;
 }
 
 .actions {
@@ -56,7 +87,6 @@ main {
   margin-left: auto;
 }
 
-/* 수정 버튼 */
 .edit-btn {
   width: 15px;
   height: 15px;
@@ -68,7 +98,6 @@ main {
   cursor: pointer;
 }
 
-/* 삭제 버튼 */
 .delete-btn {
   width: 15px;
   height: 15px;
@@ -86,21 +115,49 @@ main {
   justify-content: space-between;
 }
 
-.goal-list {
+.goal-list,
+.todo-list {
+  padding: 20px 0;
 }
 
 .goal,
 .todo {
   display: flex;
+  margin-bottom: 10px;
+  padding: 10px 10px;
+  border: 1px solid #fff0;
+  border-radius: 10px;
+  transition: all 0.5s;
+}
+
+.todo input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.goal:hover,
+.todo:hover {
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.selected-goal {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .goal button,
 .todo button {
   margin-left: auto;
+  transition: all 0.3s;
+}
+
+.goal button:hover,
+.todo button:hover {
+  opacity: 0.5;
 }
 
 .todo-section {
-  background-color: rgb(134, 134, 255);
   width: 50%;
   min-width: 300px;
   min-height: 400px;
@@ -111,6 +168,32 @@ main {
 .complete {
 }
 
-/* 투두 내용 스타일 */
-.todo-text {
+.add-goal-btn,
+.add-todo-btn {
+  background-image: url("./assets/plus.png");
+  width: 15px;
+  height: 15px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  background-position: center;
+  background-size: cover;
+  transition: all 0.3s;
+}
+
+.add-goal-btn:hover,
+.add-todo-btn:hover {
+  opacity: 0.5;
+}
+
+.division-line {
+  margin-top: 8px;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.424);
+}
+
+.complete input[type="text"] {
+  text-decoration: line-through;
+  opacity: 0.5;
 }

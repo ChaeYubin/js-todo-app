@@ -34,15 +34,17 @@ goalListEl.addEventListener("click", (e) => {
     document.getElementById(goal.id).classList.remove("selected-goal")
   );
 
-  e.target.classList.add("selected-goal");
+  if (e.target.classList[0] == "goal") {
+    e.target.classList.add("selected-goal");
 
-  // 투두 추가 버튼 활성화
-  addTodoBtnEl.removeAttribute("disabled");
+    // 투두 추가 버튼 활성화
+    addTodoBtnEl.removeAttribute("disabled");
 
-  // 화면에 띄워진 투두리스트 목록을 지운다.
-  todoListEl.innerHTML = "";
+    // 화면에 띄워진 투두리스트 목록을 지운다.
+    todoListEl.innerHTML = "";
 
-  showTodoList();
+    showTodoList();
+  }
 });
 
 // 선택한 목표의 하위 투두리스트만 화면에 그려주는 함수
@@ -64,9 +66,10 @@ function showTodoList() {
 const showDate = () => {
   const now = new Date();
 
+  const year = now.getFullYear();
   const month = now.getMonth() + 1;
   const date = now.getDate();
-  dateEl.innerHTML = `${month}월 ${date}일`;
+  dateEl.innerHTML = `${year}년 ${month}월 ${date}일`;
 };
 
 const showRandomQuote = async () => {
@@ -120,7 +123,7 @@ function createGoalEl(item) {
   const deleteBtnEl = document.createElement("button");
   deleteBtnEl.classList.add("delete-btn");
 
-  // blur가: 요소가 포커스를 잃을 때 발생하는 이벤트
+  // blur: 요소가 포커스를 잃을 때 발생하는 이벤트
   inputEl.addEventListener("blur", () => {
     inputEl.setAttribute("disabled", "");
   });
@@ -211,7 +214,15 @@ function createTodoEl(item) {
   const deleteBtnEl = document.createElement("button");
   deleteBtnEl.classList.add("delete-btn");
 
-  // blur가: 요소가 포커스를 잃을 때 발생하는 이벤트
+  checkboxEl.addEventListener("change", () => {
+    item.complete = checkboxEl.checked;
+
+    if (item.complete) {
+      itemEl.classList.add("complete");
+    } else {
+      itemEl.classList.remove("complete");
+    }
+  });
   inputEl.addEventListener("blur", () => {
     inputEl.setAttribute("disabled", "");
   });
