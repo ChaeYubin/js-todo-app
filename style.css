@@ -42,6 +42,10 @@ main {
   padding: 20px;
 }
 
+.selected-goal {
+  background-color: red;
+}
+
 .goal-text {
   width: 80%;
 }
@@ -101,4 +105,12 @@ main {
   min-width: 300px;
   min-height: 400px;
   padding: 20px;
+}
+
+/* 완료된 투두에 입힐 스타일 */
+.complete {
+}
+
+/* 투두 내용 스타일 */
+.todo-text {
 }
