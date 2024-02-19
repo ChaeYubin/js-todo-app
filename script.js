@@ -1,119 +1,24 @@
-const list = document.getElementById("list");
-const createBtn = document.getElementById("create-btn");
+const dateEl = document.querySelector(".date");
+const quoteEl = document.querySelector(".quote");
 
-let todos = [];
+// 화면이 로드되면
+window.onload = function () {
+  // 현재 날짜 표시
+  showDate();
+  // 랜덤 명언 표시
+  showRandomQuote();
+};
 
-createBtn.addEventListener("click", createNewTodo);
+showDate = function () {
+  const now = new Date();
 
-function createNewTodo() {
-  // 새로운 아이템 객체 생성
-  const item = { id: new Date().getTime(), text: "", complete: false };
-  todos.unshift(item);
+  const month = now.getMonth() + 1;
+  const date = now.getDate();
+  dateEl.innerHTML = `${month}월 ${date}일`;
+};
 
-  // 화면에 보일 요소 생성
-  const { itemEl, inputEl, editBtnEl, removeBtnEl } = createTodoEl(item);
-
-  // 리스트 요소 안에 방금 생성한 아이템 요소 추가
-  list.prepend(itemEl);
-
-  inputEl.removeAttribute("disabled");
-  inputEl.focus();
-
-  saveToLocalStorage();
-}
-
-function createTodoEl(item) {
-  console.log(item);
-  const itemEl = document.createElement("div");
-  itemEl.classList.add("item");
-
-  const checkboxEl = document.createElement("input");
-  checkboxEl.type = "checkbox";
-  checkboxEl.checked = item.complete;
-
-  if (item.complete) {
-    itemEl.classList.add("complete");
-  }
-
-  const inputEl = document.createElement("input");
-  inputEl.type = "text";
-  inputEl.value = item.text;
-  inputEl.setAttribute("disabled", "");
-
-  const actionsEl = document.createElement("div");
-  actionsEl.classList.add("actions");
-
-  const editBtnEl = document.createElement("button");
-  editBtnEl.classList.add("material-icons");
-  editBtnEl.innerText = "edit";
-
-  const removeBtnEl = document.createElement("button");
-  removeBtnEl.classList.add("material-icons", "remove-btn");
-  removeBtnEl.innerText = "remove_circles";
-
-  checkboxEl.addEventListener("change", () => {
-    item.complete = checkboxEl.checked;
-
-    if (item.complete) {
-      itemEl.classList.add("complete");
-    } else {
-      itemEl.classList.remove("complete");
-    }
-    saveToLocalStorage();
-  });
-
-  inputEl.addEventListener("blur", () => {
-    inputEl.setAttribute("disabled", "");
-    saveToLocalStorage();
-  });
-
-  editBtnEl.addEventListener("click", () => {
-    inputEl.removeAttribute("disabled");
-    inputEl.focus();
-  });
-
-  removeBtnEl.addEventListener("click", () => {
-    todos = todos.filter((el) => el.id !== item.id);
-
-    itemEl.remove();
-    saveToLocalStorage();
-  });
-
-  inputEl.addEventListener("input", () => {
-    item.text = inputEl.value;
-  });
-
-  actionsEl.append(editBtnEl);
-  actionsEl.append(removeBtnEl);
-
-  itemEl.append(checkboxEl);
-  itemEl.append(inputEl);
-  itemEl.append(actionsEl);
-
-  return { itemEl, inputEl, editBtnEl, removeBtnEl };
-}
-
-function saveToLocalStorage() {
-  const data = JSON.stringify(todos);
-  localStorage.setItem("todos", data);
-}
-
-function loadFromLocalStorage() {
-  const data = localStorage.getItem("todos");
-
-  if (data) {
-    todos = JSON.parse(data);
-  }
-}
-
-function displayTodos() {
-  loadFromLocalStorage();
-
-  for (let i = 0; i < todos.length; i++) {
-    const item = todos[i];
-    const { itemEl } = createTodoEl(item);
-    list.append(itemEl);
-  }
-}
-
-displayTodos();
+showRandomQuote = async function () {
+  const response = await fetch("https://api.adviceslip.com/advice");
+  const quote = await response.json();
+  quoteEl.innerHTML = quote.slip.advice;
+};

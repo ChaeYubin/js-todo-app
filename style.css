@@ -21,7 +21,12 @@ body {
 header {
   background-color: aquamarine;
   display: flex;
+  flex-direction: column;
   padding: 20px;
+}
+
+header .quote {
+  text-overflow: ellipsis;
 }
 
 main {
