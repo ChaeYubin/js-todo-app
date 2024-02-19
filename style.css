@@ -77,6 +77,10 @@ main {
   border-bottom: 1px solid #fff;
 }
 
+input[disabled] {
+  pointer-events: none;
+}
+
 .add-todo-btn:disabled {
   opacity: 0.3;
 }

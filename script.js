@@ -30,7 +30,11 @@ displayRandomQuote();
 
 // 목표를 선택하면 하위 투두리스트가 오른쪽에 보인다.
 goalListEl.addEventListener("click", (e) => {
-  selectedGoalId = e.target.id;
+  console.log(e.bubbles);
+  let selectedGoal = e.target.closest(".goal");
+  console.log(selectedGoal);
+  selectedGoalId = selectedGoal.id;
+  console.log(selectedGoalId);
 
   // 선택되지 않은 목표들은 선택 효과(css)가 적용되지 않는다.
   const nonSelectedGoal = goals.filter((goal) => goal.id != selectedGoalId);
