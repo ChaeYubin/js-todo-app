@@ -17,7 +17,7 @@ if (selectedGoalId == undefined) {
 }
 
 // 화면이 로드되면
-window.onload = function () {
+window.onload = () => {
   // 현재 날짜 표시
   showDate();
   // 랜덤 명언 표시
@@ -25,9 +25,8 @@ window.onload = function () {
 };
 
 // 목표를 선택하면 하위 투두리스트가 오른쪽에 보인다.
-goalListEl.addEventListener("click", function (e) {
+goalListEl.addEventListener("click", (e) => {
   selectedGoalId = e.target.id;
-  console.log(selectedGoalId);
 
   // 선택되지 않은 목표들은 선택 효과(css)가 적용되지 않는다.
   const nonSelectedGoal = goals.filter((goal) => goal.id != selectedGoalId);
@@ -39,9 +38,30 @@ goalListEl.addEventListener("click", function (e) {
 
   // 투두 추가 버튼 활성화
   addTodoBtnEl.removeAttribute("disabled");
+
+  // 화면에 띄워진 투두리스트 목록을 지운다.
+  todoListEl.innerHTML = "";
+
+  showTodoList();
 });
 
-showDate = function () {
+// 선택한 목표의 하위 투두리스트만 화면에 그려주는 함수
+function showTodoList() {
+  const todoList = goals.filter((goal) => goal.id == selectedGoalId)[0].todo;
+
+  if (todoList.length > 0) {
+    todoList.forEach((todo) => {
+      // 화면에 보일 요소 생성
+      const { itemEl, inputEl, editBtnEl, deleteBtnEl } = createTodoEl(todo);
+      inputEl.setAttribute("disabled", "");
+
+      // 리스트 요소 안에 방금 생성한 아이템 요소 추가
+      todoListEl.append(itemEl);
+    });
+  }
+}
+
+const showDate = () => {
   const now = new Date();
 
   const month = now.getMonth() + 1;
@@ -49,7 +69,7 @@ showDate = function () {
   dateEl.innerHTML = `${month}월 ${date}일`;
 };
 
-showRandomQuote = async function () {
+const showRandomQuote = async () => {
   const response = await fetch("https://api.adviceslip.com/advice");
   const quote = await response.json();
   quoteEl.innerHTML = quote.slip.advice;
@@ -68,7 +88,6 @@ function createNewGoal() {
     todo: [],
   };
   goals.unshift(item);
-  console.log(goals);
 
   // 화면에 보일 요소 생성
   const { itemEl, inputEl, editBtnEl, deleteBtnEl } = createGoalEl(item);
@@ -155,8 +174,6 @@ function createNewTodo() {
     }
     return goal;
   });
-
-  console.log(goals);
 
   // 화면에 보일 요소 생성
   const { itemEl, inputEl, editBtnEl, deleteBtnEl } = createTodoEl(item);
