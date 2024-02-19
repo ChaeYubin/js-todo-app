@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,12 +11,49 @@
     />
   </head>
   <body>
-    <div class="app">
-      <header>
-        <h1>Todo App</h1>
-        <button id="create-btn">새로운 todo 추가하기</button>
-      </header>
-      <main><div class="todo-list" id="list"></div></main>
+    <div class="container">
+      <!-- 프로필 섹션 -->
+      <div class="profile-section">
+        <div class="profile-img">
+          <img src="./assets/user.png" alt="프로필 이미지" />
+        </div>
+        <div class="profile-contents">
+          <p class="profile-nickname">유빈</p>
+          <p class="quote">명언</p>
+        </div>
+      </div>
+
+      <!--  목표 섹션 -->
+      <div class="goal-todo-container">
+        <div class="goal-section">
+          <div class="goal-section-header">
+            <h2>GOAL</h2>
+            <button class="add-btn">ADD GOAL</button>
+          </div>
+          <div class="goal-list">
+            <div class="goal">
+              <p class="goal-content">목표 내용</p>
+              <div class="rate">달성률</div>
+              <button>수정, 삭제 버튼</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 투두리스트 섹션 -->
+        <div class="todo-section">
+          <div class="todo-section-header">
+            <h2>TODO</h2>
+            <button class="add-btn">ADD TODO</button>
+          </div>
+          <div class="todo-list">
+            <div class="todo">
+              <input type="checkbox" />
+              <p class="todo-content">목표 내용</p>
+              <button>수정, 삭제 버튼</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <script src="script.js"></script>
   </body>
